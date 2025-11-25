@@ -1,9 +1,16 @@
 import { useState } from "react";
 import { API } from "../utils/api";
 import toast from 'react-hot-toast'
+import { UserContext } from '../context/UserProvider.jsx'
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Login() {
+
+
+    const { token, setToken, currentAdmin, setCurrentAdmin, currentUser, setCurrentUser } = useContext(UserContext)
+    const navigate = useNavigate()
     const [form, setForm] = useState({
         email: "",
         password: "",
@@ -17,9 +24,39 @@ export default function Login() {
 
 
     const handleLogin = async () => {
-        toast.success("Login successfull!")
-    };
 
+        const res = await API("/api/v1/user/login", "POST", form);
+        if (res) {
+            // console.log(res)
+            toast.success("Login successfull!")
+            setForm({
+                email: "",
+                password: "",
+                role: "user",
+            })
+            //set current user/admin
+            if (res?.user?.role === 'admin') {
+                setCurrentAdmin(res.user)
+                localStorage.setItem('admin', res.user)
+            } else {
+                setCurrentUser(res.user)
+                localStorage.setItem('user', res.user)
+            }
+
+            //set token for the user/admin (This will consist of user/amdin email id)
+            setToken(res?.token)
+            //also gonnta store it in localstorage so when user refresh the page we can fetch it from there
+            localStorage.setItem('token', res.token)
+            //now here we will check whether he is a user or admin and will redirect accordingly
+            //also we will gonna have access to admin/user and token from here
+
+            if (res.user.role === 'admin') {
+                navigate('/admin-dashboard')
+            } else {
+                navigate('/user-dashboard')
+            }
+        };
+    }
 
     return (
         <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
@@ -36,6 +73,7 @@ export default function Login() {
                         name="email"
                         placeholder="Enter email"
                         onChange={handleChange}
+                        value={form.email}
                         className="w-full mt-1 p-3 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-purple-500"
                     />
                 </div>
@@ -48,6 +86,7 @@ export default function Login() {
                         name="password"
                         placeholder="Enter password"
                         onChange={handleChange}
+                        value={form.password}
                         className="w-full mt-1 p-3 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-purple-500"
                     />
                 </div>
@@ -58,6 +97,7 @@ export default function Login() {
                     <select
                         name="role"
                         onChange={handleChange}
+                        value={form.role}
                         className="w-full mt-1 p-3 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-purple-500"
                     >
                         <option value="user">User</option>

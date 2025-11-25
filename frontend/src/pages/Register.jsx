@@ -1,22 +1,54 @@
 import { useState } from "react";
 import { API } from "../utils/api";
+import { useNavigate } from 'react-router-dom'
 import toast from "react-hot-toast";
-
+import { UserContext } from '../context/UserProvider.jsx'
+import { useContext } from "react";
 export default function Register() {
+    const { token, setToken, currentAdmin, setCurrentAdmin, currentUser, setCurrentUser } = useContext(UserContext)
+    const navigate = useNavigate()
     const [form, setForm] = useState({
         username: "",
         email: "",
         password: "",
         role: "user",
     });
-
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
-
     const handleRegister = async () => {
-        // const res = await API("/register", "POST", form);
-        toast.success("Regisistration successfull!")
+        const res = await API("/api/v1/user/register", "POST", form);
+        if (res) {
+            // console.log(res)
+            toast.success("Regisistration successfull!")
+            setForm({
+                username: "",
+                email: "",
+                password: "",
+                role: "user",
+            })
+            //set current user/admin
+            if (res?.user?.role === 'admin') {
+                setCurrentAdmin(res.user)
+                localStorage.setItem('admin', res.user)
+            } else {
+                setCurrentUser(res.user)
+                localStorage.setItem('user', res.user)
+            }
+
+            //set token for the user/admin (This will consist of user/amdin email id)
+            setToken(res?.token)
+            //also gonnta store it in localstorage so when user refresh the page we can fetch it from there
+            localStorage.setItem('token', res.token)
+
+            if (res.user.role === 'admin') {
+                navigate('/admin-dashboard')
+            } else {
+                navigate('/user-dashboard')
+            }
+
+        }
+
 
     };
 
@@ -34,6 +66,7 @@ export default function Register() {
                         type="text"
                         name="username"
                         placeholder="Enter your name"
+                        value={form.username}
                         onChange={handleChange}
                         className="w-full mt-1 p-3 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-purple-500"
                     />
@@ -47,6 +80,7 @@ export default function Register() {
                         name="email"
                         placeholder="Enter email"
                         onChange={handleChange}
+                        value={form.email}
                         className="w-full mt-1 p-3 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-purple-500"
                     />
                 </div>
@@ -58,6 +92,7 @@ export default function Register() {
                         type="password"
                         name="password"
                         placeholder="Create password"
+                        value={form.password}
                         onChange={handleChange}
                         className="w-full mt-1 p-3 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-purple-500"
                     />
@@ -69,6 +104,7 @@ export default function Register() {
                     <select
                         name="role"
                         onChange={handleChange}
+                        value={form.role}
                         className="w-full mt-1 p-3 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-purple-500"
                     >
                         <option value="user">User</option>

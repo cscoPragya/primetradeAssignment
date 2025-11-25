@@ -1,5 +1,4 @@
-import { User } from '../DB/db.js'
-
+import { User } from '../models/user.model.js'
 export const registerController = async (req, res, next) => {
 
     const { username, email, password, role } = req.body
@@ -9,13 +8,13 @@ export const registerController = async (req, res, next) => {
     //may be on the time of registration we also do create jwt and save it so just let me
     //otherwise just insert them into the schema
     try {
-
         const createdUser = await User.create({
             username,
             email,
             password,
             role
         })
+        console.log("created user", createdUser)
         const token = createdUser.generateToken()
         res.status(201).json({ user: createdUser, token: token })
 
@@ -25,8 +24,7 @@ export const registerController = async (req, res, next) => {
     }
 
 }
-
-export const loginController = async (req, req, next) => {
+export const loginController = async (req, res, next) => {
     const { email, password, role } = req.body
     if (!email || !password || !role) {
         return res.status(400).json({ message: "All fields are mandatory!" })
@@ -45,6 +43,8 @@ export const loginController = async (req, req, next) => {
     }
 
     //otherwise just give him a token yrr itna bhi kya bhab khana!!!
+
+    const token = user.generateToken();
     res.status(200).json({ user: user, token: token })
 }
 

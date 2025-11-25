@@ -26,29 +26,30 @@ const userSchema = new mongoose.Schema({
     }
 }, { timestamps: true })
 
-export const User = mongoose.model('user', userSchema)
-
-
-userSchema.pre('save', (async (next) => {
-
-    // this will run whenever a user being created
-    if (!this.isModified("password")) return next();
-
-    //other wise just give a hashed password
-    this.password = bcrypt.hash(this.password, 10)
-    //don't need to return anything it will automatically gonna change the password
-    next()
-}))
 
 
 
-userSchema.methods.generateToken = (() => {
+userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) {
+        return next;
+    }
+
+    this.password = await bcrypt.hash(this.password, 10);
+    return next;
+});
+
+
+
+
+userSchema.methods.generateToken = function () {
     return jwt.sign({ id: this._id }, `${process.env.JWT_SECRET}`, { expiresIn: '7d' })
-})
+}
 
-userSchema.methods.comparePassword = (async () => {
+userSchema.methods.comparePassword = async function (password) {
     return bcrypt.compare(this.password, password)
 
-})
+}
+
+export const User = mongoose.model('user', userSchema)
 
 //what if I need to verify this password then I will directly use jwt.verify may be 
