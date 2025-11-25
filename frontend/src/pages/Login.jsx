@@ -1,43 +1,32 @@
 import { useState } from "react";
 import { API } from "../utils/api";
-import toast from "react-hot-toast";
+import toast from 'react-hot-toast'
 
-export default function Register() {
+
+export default function Login() {
     const [form, setForm] = useState({
-        username: "",
         email: "",
         password: "",
         role: "user",
     });
 
+
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleRegister = async () => {
-        // const res = await API("/register", "POST", form);
-        toast.success("Regisistration successfull!")
 
+    const handleLogin = async () => {
+        toast.success("Login successfull!")
     };
+
 
     return (
         <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
             <div className="bg-slate-800 p-8 rounded-2xl shadow-xl w-full max-w-md">
                 <h1 className="text-3xl font-bold text-purple-400 mb-6 text-center">
-                    Create Account
+                    Login
                 </h1>
-
-                {/* Username */}
-                <div className="mb-4">
-                    <label className="text-purple-300 text-sm">Username</label>
-                    <input
-                        type="text"
-                        name="username"
-                        placeholder="Enter your name"
-                        onChange={handleChange}
-                        className="w-full mt-1 p-3 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-purple-500"
-                    />
-                </div>
 
                 {/* Email */}
                 <div className="mb-4">
@@ -57,14 +46,14 @@ export default function Register() {
                     <input
                         type="password"
                         name="password"
-                        placeholder="Create password"
+                        placeholder="Enter password"
                         onChange={handleChange}
                         className="w-full mt-1 p-3 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-purple-500"
                     />
                 </div>
 
                 {/* Role */}
-                <div className="mb-5">
+                <div className="mb-6">
                     <label className="text-purple-300 text-sm">Role</label>
                     <select
                         name="role"
@@ -76,18 +65,18 @@ export default function Register() {
                     </select>
                 </div>
 
-                {/* Submit */}
+                {/* Login Button */}
                 <button
-                    onClick={handleRegister}
+                    onClick={handleLogin}
                     className="w-full bg-purple-600 hover:bg-purple-700 transition p-3 rounded-lg text-white font-semibold shadow-md cursor-pointer"
                 >
-                    Register
+                    Login
                 </button>
 
                 <p className="text-center text-sm mt-4 text-gray-400">
-                    Already have an account?{" "}
-                    <a href="/login" className="text-purple-400 hover:underline">
-                        Login
+                    Don't have an account?{" "}
+                    <a href="/register" className="text-purple-400 hover:underline">
+                        Register
                     </a>
                 </p>
             </div>
