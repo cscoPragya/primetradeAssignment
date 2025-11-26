@@ -44,6 +44,19 @@ This project is submitted as part of the **Frontend Developer Intern Assignment 
 |-- server.js
 |-- package.json
 ```
+## 🧱 Database Schema
+### User Schema
+- username
+- email
+- password
+- role
+### Task Schema
+- title
+- description
+- priority
+- status
+- dueDate
+- user (reference)
 
 ## ⚙️ Setup Instructions
 
@@ -104,6 +117,10 @@ npm run dev
 
 # 📚 POSTMAN API Documentation
 
+## Collection Link:
+ ```bash
+ https://.postman.co/workspace/My-Workspace~e8b330b7-ad66-4d48-85c3-1c56867b6f7d/collection/29204540-d930a253-6da9-4585-b148-ca7fe54a3335?action=share&creator=29204540
+ ```
 ##  AUTH ROUTES
 ### **1. Register**
 ```
@@ -178,9 +195,9 @@ Body:
 {
    title: "task_title",
    description: "task_description",
-   priority: "moderate", //default
-   status: "pending",  //default
-   dueDate: "date",    //type-date
+   priority: "moderate", 
+   status: "pending", 
+   dueDate: "date",    
 }
 ```
 
@@ -214,8 +231,18 @@ Task Manager API
       ├── Delete Task
       └── Update Task
 ```
-
 ---
+## Scalability Notes (Required Deliverable)
+
+- The application is designed with scalability in mind:
+- Modular route + controller structure
+- JWT-based stateless authentication
+- Database indexing for user + task relations
+
+### Ready for:
+- Redis caching
+- Docker-based container deployment
+- Microservice separation (auth, tasks, admin)
 
 ## ❤️ Author
 Pragya Rajput  
