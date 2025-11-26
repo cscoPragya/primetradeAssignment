@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
+import { API } from "../utils/api.js";
+import { UserContext } from "../context/UserProvider.jsx";
+import { useContext } from 'react'
 
-export default function CreateTaskModal({ onClose, onCreate }) {
+export default function CreateTaskModal() {
+    const { token, createTaskModal, setCreateTaskModal, setTasks } = useContext(UserContext)
+
     const [form, setForm] = useState({
         title: "",
         description: "",
@@ -8,7 +13,19 @@ export default function CreateTaskModal({ onClose, onCreate }) {
         status: "pending",
         dueDate: "",
     });
+    //handle create task
+    const onCreate = async () => {
+        const res = await API("/api/v1/user/crud/add-task", "POST", form, token)
+        console.log(res)
+        setCreateTaskModal(false)
+        const resTasks = await API("/api/v1/user/crud/get-tasks", "GET", null, token);
+        console.log(res)
+        setTasks(resTasks.tasks)
 
+    }
+    const onClose = () => {
+        setCreateTaskModal(false)
+    }
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };

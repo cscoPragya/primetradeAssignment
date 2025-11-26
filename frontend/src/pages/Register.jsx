@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import toast from "react-hot-toast";
 import { UserContext } from '../context/UserProvider.jsx'
 import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { FaHome } from "react-icons/fa";
 export default function Register() {
     const { token, setToken, currentAdmin, setCurrentAdmin, currentUser, setCurrentUser } = useContext(UserContext)
     const navigate = useNavigate()
@@ -19,7 +21,7 @@ export default function Register() {
     const handleRegister = async () => {
         const res = await API("/api/v1/user/register", "POST", form);
         if (res) {
-            // console.log(res)
+            console.log(res)
             toast.success("Regisistration successfull!")
             setForm({
                 username: "",
@@ -30,10 +32,16 @@ export default function Register() {
             //set current user/admin
             if (res?.user?.role === 'admin') {
                 setCurrentAdmin(res.user)
-                localStorage.setItem('admin', res.user)
+                if (JSON.parse(localStorage.getItem('user'))) {
+                    localStorage.removeItem('user')
+                }
+                localStorage.setItem('admin', JSON.stringify(res.user))
             } else {
                 setCurrentUser(res.user)
-                localStorage.setItem('user', res.user)
+                if (JSON.parse(localStorage.getItem('admin'))) {
+                    localStorage.removeItem('admin')
+                }
+                localStorage.setItem('user', JSON.stringify(res.user))
             }
 
             //set token for the user/admin (This will consist of user/amdin email id)
@@ -54,10 +62,18 @@ export default function Register() {
 
     return (
         <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
-            <div className="bg-slate-800 p-8 rounded-2xl shadow-xl w-full max-w-md">
+            <div className="bg-slate-800 p-8 rounded-2xl shadow-xl w-full max-w-md relative">
                 <h1 className="text-3xl font-bold text-purple-400 mb-6 text-center">
                     Create Account
                 </h1>
+                <Link
+                    to="/"
+                    className="top-10 right-15 text-purple-400 hover:text-purple-300 transition text-l absolute"
+                    title="Go to Home"
+                >
+                    <FaHome size={26} />
+                </Link>
+
 
                 {/* Username */}
                 <div className="mb-4">
@@ -122,9 +138,9 @@ export default function Register() {
 
                 <p className="text-center text-sm mt-4 text-gray-400">
                     Already have an account?{" "}
-                    <a href="/login" className="text-purple-400 hover:underline">
+                    <Link to="/login" className="text-purple-400 hover:underline">
                         Login
-                    </a>
+                    </Link>
                 </p>
             </div>
         </div>

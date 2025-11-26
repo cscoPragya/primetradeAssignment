@@ -3,12 +3,10 @@ import { User } from '../models/user.model.js'
 import { Task } from '../models/task.model.js'
 
 
-
 //for user
 
 export const getTasksController = async (req, res, next) => {
     //ab yha hum sabhi tasks lane h hume jo ki user is specific user s related ho 
-
 
     const user = req.user;
     try {
@@ -73,7 +71,6 @@ export const deleteTaskByIdController = async (req, res, next) => {
         return res.status(500).json({ message: 'Internal server error!' })
     }
 }
-
 export const updateTaskByIdController = async (req, res, next) => {
     const { id } = req.params
     // const { title, description, dueDate, status, priority } = req.body
@@ -82,8 +79,8 @@ export const updateTaskByIdController = async (req, res, next) => {
         return res.status(400).json({ message: "Id is required!" })
     }
     try {
-
-        const updatedTask = await Task.findOneAndUpdate(req.params._id, req.body, { new: true })
+        console.log(req.body)
+        const updatedTask = await Task.findOneAndUpdate({ _id: id }, req.body, { new: true })
         return res.status(200).json({ task: updatedTask })
 
     } catch (err) {

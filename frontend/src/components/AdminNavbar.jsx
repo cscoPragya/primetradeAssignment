@@ -1,27 +1,45 @@
 import { Link } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
-
 export default function AdminNavbar() {
+
+    const logout = () => {
+        localStorage.clear()
+    }
     return (
         <nav className="fixed top-0 left-0 w-full z-20 
                     backdrop-blur-md bg-slate-900/90 
                     border-b border-slate-700/40">
 
             <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-
                 {/* App Title */}
                 <h1 className="text-2xl font-bold text-purple-400 tracking-wide">
                     TaskFlow
                 </h1>
+                <div className="flex gap-[15%] absolute right-[5%]">
+                    {/* //Logout button */}
 
-                {/* Home Button */}
-                <Link
-                    to="/"
-                    className="text-purple-400 hover:text-purple-300 transition text-xl"
-                    title="Go to Home"
-                >
-                    <FaHome size={26} />
-                </Link>
+                    <Link
+                        to={`/`}
+                        className={`px-5 py-1.5 rounded-lg text-white
+                                    bg-purple-600 hover:bg-purple-700
+                                    transition shadow `}
+                        onClick={(() => {
+                            logout()
+                        })}
+                    >
+                        Logout
+                    </Link>
+
+                    {/* Home Button */}
+                    <Link
+                        to="/"
+                        className="text-purple-400 hover:text-purple-300 transition text-xl"
+                        title="Go to Home"
+                    >
+                        <FaHome size={26} />
+                    </Link>
+                </div>
+
 
             </div>
         </nav>

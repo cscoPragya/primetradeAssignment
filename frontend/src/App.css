@@ -1,0 +1,17 @@
+.only-desktop-message {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    font-size: 20px;
+    color: white;
+}
+
+@media (max-width: 1023px) {
+    .only-desktop-message {
+        display: block;
+    }
+
+    .main-content {
+        display: none;
+    }
+}

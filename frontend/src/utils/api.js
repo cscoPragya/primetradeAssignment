@@ -1,4 +1,5 @@
 export const API = async (endpoint, method = "GET", body = null, token = null) => {
+
     try {
         const res = await fetch(`${import.meta.env.VITE_BASE_URL}${endpoint}`, {
             method,
@@ -8,8 +9,12 @@ export const API = async (endpoint, method = "GET", body = null, token = null) =
             },
             body: body ? JSON.stringify(body) : null,
         });
+        const json = await res.json()
+        return {
+            status: res.status,
+            ...json
 
-        return res.json();
+        };
     } catch (err) {
         console.log("API Error", err);
     }

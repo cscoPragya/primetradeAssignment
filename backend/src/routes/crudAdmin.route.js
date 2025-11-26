@@ -5,8 +5,6 @@ import { deleteAnyUser, getAllTasks, getAllUsers } from '../controllers/crud.con
 const router = Router()
 router.get("/users", protectRouteForAdmin, getAllUsers);
 router.get("/all-tasks", protectRouteForAdmin, getAllTasks);
-router.delete("/deleteAnyUser/:id", protectRouteForAdmin, deleteAnyUser);
+router.get("/deleteAnyUser/:id", protectRouteForAdmin, deleteAnyUser);
 // router.put("/task/:id", isAuthenticated, protectRouteForAdmin, updateAnyTask);
-
-
 export default router

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-
+import { UserContext } from "../context/UserProvider";
+import { useContext } from "react";
+import { API } from "../utils/api.js";
 export default function EditTaskModal({ task }) {
+    const { editModal, setEditModal, token, setTasks } = useContext(UserContext)
     if (!task) return null;
-    const onClose = () => { }
-    const onSave = () => { }
-    document.body.style.overflow = "hidden"
     const [form, setForm] = useState({
         title: task.title,
         description: task.description,
@@ -12,6 +12,22 @@ export default function EditTaskModal({ task }) {
         status: task.status,
         dueDate: task.dueDate ? task.dueDate.slice(0, 10) : "",
     });
+    const onClose = () => {
+        setEditModal(false)
+    }
+    const onSave = async () => {
+        // console.log(task
+        // )
+        const updatedTask = await API(`/api/v1/user/crud/update-task/${task._id}`, "POST", form, token);
+
+        console.log("UpdatedTask,", updatedTask)
+        const res = await API("/api/v1/user/crud/get-tasks", "GET", null, token);
+        setEditModal(false)
+        setTasks(res.tasks)
+
+    }
+    document.body.style.overflow = "hidden"
+
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });

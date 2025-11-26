@@ -1,9 +1,23 @@
 import { useEffect } from "react";
+import { UserContext } from "../context/UserProvider";
+import { useContext } from "react";
+import { API } from '../utils/api.js'
 
 export default function DeleteUserModal({ user }) {
     if (!user) return null;
-    const onClose = () => { }
-    const onDelete = () => { }
+    const { setDeleteUserModal, token, users, setUsers } = useContext(UserContext)
+    const onClose = () => {
+        setDeleteUserModal(false)
+    }
+    const onDelete = async () => {
+        const deletedUser = await API(`/api/v1/admin/crud/deleteAnyUser/${user._id}`, 'GET', null, token)
+        console.log("Deleted user:", deletedUser.user)
+        setDeleteUserModal(false)
+        //abhi yha firse users ko bhi fetch krna hoga
+        const res = await API("/api/v1/admin/crud/users", "GET", null, token);
+        setUsers(res.users)
+
+    }//here we need to deal with db
 
 
     // Disable background scroll

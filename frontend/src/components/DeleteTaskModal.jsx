@@ -1,8 +1,20 @@
+import { UserContext } from "../context/UserProvider";
+import { useContext } from "react";
+import { API } from "../utils/api.js";
 export default function DeleteTaskModal({ task }) {
+    const { token, setTasks, deleteModal, setDeleteModal } = useContext(UserContext)
     if (!task) return null;
-    const onClick = () => { }
-    const onClose = () => { }
-    const onDelete = () => { }
+
+    const onClose = () => {
+        setDeleteModal(false)
+    }
+    const onDelete = async () => {
+        const deletedTask = await API(`/api/v1/user/crud/delete-task/${task._id}`, "GET", null, token)
+        console.log(deletedTask.message)
+        const res = await API("/api/v1/user/crud/get-tasks", "GET", null, token);
+        setDeleteModal(false)
+        setTasks(res.tasks)
+    }
 
     return (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">

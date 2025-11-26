@@ -1,9 +1,12 @@
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
+import { UserContext } from "../context/UserProvider";
+import { useContext } from "react";
 
 export default function Home() {
+    const { currentAdmin, currentUser } = useContext(UserContext)
     return (
-        <div className="h-[100vh] bg-slate-900 text-white  relative">
+        <div className="min-h-[100vh] bg-slate-900 text-white  relative p-0 m-0">
 
             <Navbar />
 
@@ -24,7 +27,13 @@ export default function Home() {
 
                 {/* CTA BUTTON */}
                 <Link
-                    to="/login"
+                    to={
+                        currentAdmin
+                            ? '/admin-dashboard'
+                            : currentUser
+                                ? '/user-dashboard'
+                                : '/login'
+                    }
                     className="mt-10 px-8 py-3 rounded-xl text-white text-lg font-semibold
                      bg-purple-600 hover:bg-purple-700 transition shadow-lg"
                 >
@@ -35,6 +44,7 @@ export default function Home() {
                 <div className="mt-16 w-100 h-72 bg-purple-500/20 rounded-full blur-2xl absolute top-[15%]"></div>
 
             </div>
+
         </div>
     );
 }

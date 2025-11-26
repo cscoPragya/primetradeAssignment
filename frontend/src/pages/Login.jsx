@@ -3,7 +3,8 @@ import { API } from "../utils/api";
 import toast from 'react-hot-toast'
 import { UserContext } from '../context/UserProvider.jsx'
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FaHome } from "react-icons/fa";
 
 
 export default function Login() {
@@ -37,10 +38,10 @@ export default function Login() {
             //set current user/admin
             if (res?.user?.role === 'admin') {
                 setCurrentAdmin(res.user)
-                localStorage.setItem('admin', res.user)
+                localStorage.setItem('admin', JSON.stringify(res.user))
             } else {
                 setCurrentUser(res.user)
-                localStorage.setItem('user', res.user)
+                localStorage.setItem('user', JSON.stringify(res.user))
             }
 
             //set token for the user/admin (This will consist of user/amdin email id)
@@ -59,11 +60,18 @@ export default function Login() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
-            <div className="bg-slate-800 p-8 rounded-2xl shadow-xl w-full max-w-md">
+        <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4 ">
+            <div className="bg-slate-800 p-8 rounded-2xl shadow-xl w-full max-w-md relative">
                 <h1 className="text-3xl font-bold text-purple-400 mb-6 text-center">
                     Login
                 </h1>
+                <Link
+                    to="/"
+                    className="top-10 right-15 text-purple-400 hover:text-purple-300 transition text-l absolute"
+                    title="Go to Home"
+                >
+                    <FaHome size={26} />
+                </Link>
 
                 {/* Email */}
                 <div className="mb-4">
@@ -115,9 +123,9 @@ export default function Login() {
 
                 <p className="text-center text-sm mt-4 text-gray-400">
                     Don't have an account?{" "}
-                    <a href="/register" className="text-purple-400 hover:underline">
+                    <Link to="/register" className="text-purple-400 hover:underline">
                         Register
-                    </a>
+                    </Link>
                 </p>
             </div>
         </div>

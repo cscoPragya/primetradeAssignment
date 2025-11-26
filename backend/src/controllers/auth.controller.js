@@ -1,4 +1,5 @@
 import { User } from '../models/user.model.js'
+import jwt from 'jsonwebtoken'
 export const registerController = async (req, res, next) => {
 
     const { username, email, password, role } = req.body
@@ -47,4 +48,27 @@ export const loginController = async (req, res, next) => {
     const token = user.generateToken();
     res.status(200).json({ user: user, token: token })
 }
+
+export const validateTokenController = async (req, res, next) => {
+    const token = req?.cookies?.token || req?.headers?.authorization?.split(" ")[1]
+    if (!token) {
+        return res.status(400).json({ message: "Send token to validate!" });
+    }
+    try {
+        const { id } = jwt.verify(token, process.env.JWT_SECRET)
+        const user = await User.findById({ _id: id })
+        if (!user) {
+            return res.status(401).json({ message: "User doesn't exists!" })
+        } else {
+            return res.status(200).json({ user })
+        }
+    } catch (err) {
+        console.error("Error in validateTokenController,", err.message)
+        return res.status(500).json({ message: "Internal server error!" })
+    }
+}
+
+// export const logoutController = async (req, res, next) => {
+//The concept of inserting user token into blockedToken list can be implemented further!
+// }
 
