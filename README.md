@@ -193,11 +193,11 @@ POST /add-task
 Body:
 ```json
 {
-   title: "task_title",
-   description: "task_description",
-   priority: "moderate", 
-   status: "pending", 
-   dueDate: "date",    
+   "title": "task_title",
+   "description": "task_description",
+   "priority": "moderate", 
+   "status": "pending", 
+   "dueDate": "date"   
 }
 ```
 
