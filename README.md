@@ -115,7 +115,7 @@ Body:
   "username": "User",
   "email": "user@gmail.com",
   "password": "123456",
-  "role": "user" || "admin"
+  "role": "user || admin"
 }
 ```
 
