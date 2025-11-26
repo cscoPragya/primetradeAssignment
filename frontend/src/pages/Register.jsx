@@ -9,6 +9,7 @@ import { FaHome } from "react-icons/fa";
 export default function Register() {
     const { token, setToken, currentAdmin, setCurrentAdmin, currentUser, setCurrentUser } = useContext(UserContext)
     const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(false)
     const [form, setForm] = useState({
         username: "",
         email: "",
@@ -20,6 +21,7 @@ export default function Register() {
     };
     const handleRegister = async () => {
         const res = await API("/api/v1/user/register", "POST", form);
+        setIsLoading(false)
         if (res) {
             console.log(res)
             toast.success("Regisistration successfull!")
@@ -130,10 +132,13 @@ export default function Register() {
 
                 {/* Submit */}
                 <button
-                    onClick={handleRegister}
+                    onClick={(() => {
+                        handleRegister()
+                        setIsLoading(true)
+                    })}
                     className="w-full bg-purple-600 hover:bg-purple-700 transition p-3 rounded-lg text-white font-semibold shadow-md cursor-pointer"
                 >
-                    Register
+                    {isLoading ? 'Processing...' : 'Register'}
                 </button>
 
                 <p className="text-center text-sm mt-4 text-gray-400">

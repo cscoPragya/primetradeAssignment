@@ -63,11 +63,13 @@ export default function UserDashboard() {
         if (!token) return
         (async () => {
             const res = await API("/api/v1/user/crud/get-tasks", "GET", null, token);
-
+            // console.log(res)
             setTasks(res.tasks)
+
         })()
 
     }, [token])
+
     return (
         <>
             <nav className="fixed top-0 left-0 w-full z-20 
@@ -130,7 +132,7 @@ export default function UserDashboard() {
 
                 {/* Tasks Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {tasks == null ? <p>No tasks yet!</p> : tasks?.map((task) => (
+                    {tasks?.length == 0 ? <p>No tasks yet!</p> : tasks?.map((task) => (
                         <div
                             key={task._id}
                             className="bg-slate-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition"

@@ -8,6 +8,7 @@ import { FaHome } from "react-icons/fa";
 
 
 export default function Login() {
+    const [isLoading, setIsLoading] = useState(false)
 
 
     const { token, setToken, currentAdmin, setCurrentAdmin, currentUser, setCurrentUser } = useContext(UserContext)
@@ -27,6 +28,7 @@ export default function Login() {
     const handleLogin = async () => {
 
         const res = await API("/api/v1/user/login", "POST", form);
+        setIsLoading(false)
         if (res) {
             // console.log(res)
             toast.success("Login successfull!")
@@ -115,10 +117,13 @@ export default function Login() {
 
                 {/* Login Button */}
                 <button
-                    onClick={handleLogin}
+                    onClick={(() => {
+                        handleLogin()
+                        setIsLoading(true)
+                    })}
                     className="w-full bg-purple-600 hover:bg-purple-700 transition p-3 rounded-lg text-white font-semibold shadow-md cursor-pointer"
                 >
-                    Login
+                    {isLoading ? 'Processing...' : 'Login'}
                 </button>
 
                 <p className="text-center text-sm mt-4 text-gray-400">
