@@ -34,14 +34,15 @@ This project is submitted as part of the **Frontend Developer Intern Assignment 
 
 ## 🗂 Folder Structure (Backend)
 ```bash
-/backend
+/backend/src
 |-- controllers
 |-- models
 |-- middleware
 |-- routes
-|-- config
+|-- utils
+|-- DB
 |-- server.js
-|-- README.md
+|-- package.json
 ```
 
 ## ⚙️ Setup Instructions
@@ -53,7 +54,7 @@ npm install
 ```
 Create a .env file:
 ```bash
-PORT=5000
+PORT=3000
 MONGO_URI=your_mongo_url
 JWT_SECRET=your_jwt_secret
 ```
